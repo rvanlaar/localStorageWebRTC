@@ -45,6 +45,7 @@ setRemoteDescription();
 function createAnswer(){
 	console.log('receiver: createAnswer');
 	peerConnection.createAnswer(function (sessionDescription) {
+		console.log('receiver: createAnswer callback');
 		peerConnection.setLocalDescription(sessionDescription);
 		localStorage.setItem("receiver-sdp", JSON.stringify(sessionDescription));
 	})
