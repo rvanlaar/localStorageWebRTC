@@ -14,7 +14,7 @@ function icecallback(event) {
 		var item = JSON.parse(localStorage.getItem('sender-ice'));
 		item.push(event.candidate);
 		localStorage.setItem('sender-ice', JSON.stringify(item))
-		console.log('sender: ice: ' + JSON.stringify(item));
+		console.log('sender: ice: ' + JSON.stringify(event.candidate));
 	} else {
 		console.log("sender: icecallback: null");
 	}
