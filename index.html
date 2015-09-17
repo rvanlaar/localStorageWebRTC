@@ -2,15 +2,23 @@
 <html>
   <head>
 	<title>WebRTC datachannel Spike</title>
+	<meta charset="utf-8">
 	<script src="js/adapter.js"></script>
+	<link type="text/css" rel="stylesheet" href="css/common.css" />
   </head>
   <body>
-	<p>Load this page</p>
-	<p>Load <a target="_blank" href="client.html">client</a> in a new tab.</p>
-	<p>Come back here and click on <button id="setRemoteDescription">Next Step</button>
-	</p>
-	<p>Now click <button id="sendButton">SEND</button></p>
-    <p>Go back to the client and see the data in the text area.</p>
-    <script src="js/sender.js"></script>
+	<div>
+	  <p>Click start <button id="start">Start</button></p>
+	  <p>Load <a target="_blank" href="client.html">client</a> in a new tab.</p>
+	  <p>Come back here and click on <button id="setRemoteDescription">Next Step</button>
+	  </p>
+	  <p>Now click <button id="sendButton">SEND</button></p>
+      <p>Go back to the client and see the data in the text area.</p>
+	</div>
+	<div id="results">
+	  <button id="clearLog">clear log</button>
+	</div>
+	<script src="js/common.js"></script>
+	<script src="js/sender.js"></script>
   </body>
 </html>

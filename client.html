@@ -2,11 +2,20 @@
 <html>
   <head>
 	<title>WebRTC datachannel Spike</title>
+	<meta charset="utf-8">
 	<script src="js/adapter.js"></script>
+	<link type="text/css" rel="stylesheet" href="css/common.css" />
   </head>
   <body>
-	<textarea id="dataChannelReceive"></textarea>
-	<button id="clearButton">Clear Text</button>
+	<div>
+	  <p>Click start <button id="start">Start</button></p>
+		<textarea id="dataChannelReceive"></textarea>
+		<p><button id="clearText">Clear Text</button></p>
+	</div>
+	<div id="results">
+	  <button id="clearLog">Clear Log</button>
+	</div>
+	<script src="js/common.js"></script>
 	<script src="js/reciever.js"></script>
   </body>
 </html>

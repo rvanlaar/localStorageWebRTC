@@ -1,20 +1,19 @@
-console.log('receiver: loaded');
-localStorage.setItem('receiver-ice', JSON.stringify([]));
-
-var pc_config = {"iceServers": [{"url": "stun:stun.l.google.com:19302"}]};
+var pc_config = {"iceServers": [{"urls": "stun:stun.l.google.com:19302"}]};
 var pc_constraints = {"optional": [{RtpDataChannels: true}]}
 
 var peerConnection = new RTCPeerConnection(pc_config, pc_constraints);
 
 
 function icecallback(event) {
-	console.log('receiver: icecallback');
 	if (event.candidate !== null) {
 		var item = JSON.parse(localStorage.getItem('receiver-ice'));
 		item.push(event.candidate);
 		localStorage.setItem('receiver-ice', JSON.stringify(item));
-		console.log('reciever: ice: ' + JSON.stringify(event.candidate));
+		log('icecallback: ' + JSON.stringify(event.candidate));
+	} else {
+		log("icecallback: null");
 	}
+
 }
 
 var dataChannelOptions = {
@@ -34,45 +33,57 @@ dataChannel.onopen = function () {
 peerConnection.onicecandidate = icecallback;
 
 function setRemoteDescription() {
-	console.log('receiver: set remote description');
+	log('parse SDP from sender');
 	var sdp = JSON.parse(localStorage.getItem("sender-sdp"));
+	log('create a new SDP object with sender SDP');
 	desc = new RTCSessionDescription(sdp);
+	log('set remote sessionDescription');
 	peerConnection.setRemoteDescription(desc);
 
 }
-setRemoteDescription();
 
 function createAnswer(){
-	console.log('receiver: createAnswer');
+	log('createAnswer');
 	peerConnection.createAnswer(function (sessionDescription) {
-		console.log('receiver: createAnswer callback');
+		log(JSON.stringify(sessionDescription));
+		log('set local sessionDescription');
 		peerConnection.setLocalDescription(sessionDescription);
 		localStorage.setItem("receiver-sdp", JSON.stringify(sessionDescription));
 	})
 }
-createAnswer();
 
 function connectIce(){
-	console.log('receiver: Create ICE');
+	log('parse ICE from sender')
 	var senderIce = JSON.parse(localStorage.getItem('sender-ice'));
 	var iceLength = senderIce.length;
 	for (var i = 0; i < iceLength; i++) {
-		console.log('receiver: Add ICE');
+		log('Add ICEcandidate from sender');
 		peerConnection.addIceCandidate(new RTCIceCandidate(senderIce[i]));
 	}
 }
-connectIce();
+
+function start(){
+	localStorage.setItem('receiver-ice', JSON.stringify([]));
+    setRemoteDescription();
+	createAnswer();
+	connectIce();
+}
+
 
 //Non WebRTC code
+var startButton = document.getElementById('start');
+startButton.onclick = start;
+
+
 var receiveText = document.getElementById('dataChannelReceive');
 
 function receiveData(event) {
 	receiveText.value = event.data;
-	console.log('receiver: received: ' + event.data);
+	log(' received: ' + event.data);
 }
 
-var clearButton = document.getElementById('clearButton');
-clearButton.onclick = clearData;
+var clearText = document.getElementById('clearText');
+clearText.onclick = clearData;
 
 function clearData() {
 	receiveText.value = '';
